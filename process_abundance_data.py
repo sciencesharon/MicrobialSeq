@@ -83,13 +83,21 @@ def merged_abundance_processing(merged, output_dir):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Process merged abundance data and save results as CSV files.")
-    parser.add_argument('input_file', type=str, help="Path to the input merged CSV file.")
+    parser.add_argument('input_file', type=str, help="Path to the input merged CSV or TXT file.")
     parser.add_argument('output_dir', type=str, help="Directory where the output CSV files will be saved.")
 
     args = parser.parse_args()
 
+    # Determine the file extension
+    file_extension = os.path.splitext(args.input_file)[1].lower()
+
     # Load the merged data
-    merged = pd.read_csv(args.input_file)
+    if file_extension == '.csv':
+        merged = pd.read_csv(args.input_file)
+    elif file_extension == '.txt':
+        merged = pd.read_csv(args.input_file, delimiter='\t')
+    else:
+        raise ValueError("Unsupported file format. Please provide a .csv or .txt file.")
 
     # Process the merged data
     processed_list = merged_abundance_processing(merged, args.output_dir)
