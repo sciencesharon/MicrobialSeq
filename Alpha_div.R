@@ -13,6 +13,22 @@
 #stack_plots allows for optional output of stacked richness, evenness, and complexity plot output
 #you can also change the width and height of the output pdf files
 
+# Function to check and install required packages
+check_and_install <- function(packages) {
+  for (package in packages) {
+    if (!require(package, character.only = TRUE)) {
+      install.packages(package, dependencies = TRUE)
+      library(package, character.only = TRUE)
+    }
+  }
+}
+
+# List of required packages
+required_packages <- c("patchwork", "ggplot2", "dplyr", "rstatix")
+
+# Check and install required packages
+check_and_install(required_packages)
+
 alpha_div_auto <- function(count_data, met, comparison_var, output_dir = "results", pdf_width = 8, pdf_height = 5, stack_plots = FALSE) {
   
   # Check if rownames of met match column names of count_data
@@ -113,9 +129,9 @@ alpha_div_auto <- function(count_data, met, comparison_var, output_dir = "result
       ggsave(file.path(output_dir, "combined_plot.pdf"), plot = combined_plot, width = width, height = height * 3)
     } else {
       metrics <- list(
-        list(y_var = "S.obs", plot_title = "Richness", y_label = "Richness", plot_tag = "A", file_name = "richness.pdf"),
+        list(y_var = "S.obs", plot_title = "Richness", y_label = "Species Evenness", plot_tag = "A", file_name = "richness.pdf"),
         list(y_var = "S.chao1", plot_title = "Chao1", y_label = "Chao1 Index", plot_tag = "B", file_name = "chao1.pdf"),
-        list(y_var = "evenness", plot_title = "Evenness", y_label = "Evenness", plot_tag = "C", file_name = "evenness.pdf"),
+        list(y_var = "evenness", plot_title = "Evenness", y_label = "Species Evenness", plot_tag = "C", file_name = "evenness.pdf"),
         list(y_var = "shannon", plot_title = "Shannon", y_label = "Shannon Diversity Index", plot_tag = "D", file_name = "shannon.pdf")
       )
       
