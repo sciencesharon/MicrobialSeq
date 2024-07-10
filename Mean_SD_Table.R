@@ -7,7 +7,7 @@
 #You can also optionally adjust the p-value by either bonferroni or BH - this outputs the p-adjust 
 #Then finally you can also optionally add a column called "stars" which will show significance stars based on the p-value or p-adjust 
 
-data <- read.csv("/home/cornell/Documents/Temp/demographic/Example_Data_Table.csv")
+data <- read.csv("/path/to/your/data/Example_Data_Table.csv")
 
 Male <- data[data$Gender %in% c("Male"),]
 Female <- data[data$Gender %in% c("Female"),]
@@ -117,7 +117,7 @@ calculate_mean_sd <- function(data_list, columns, file_name, directory, decimal_
   return(results)
 }
 
-dir <- ("/home/cornell/Documents/Temp/demographic")
+dir <- ("/path/to/save/your/output")
 
 means <- calculate_mean_sd(data_list, 
                            columns, 
