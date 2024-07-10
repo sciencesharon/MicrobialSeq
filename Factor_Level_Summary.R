@@ -128,8 +128,7 @@ metadata <- read.csv("/path/to/your/file/Example_Metadata.csv")
 
 # Convert specified columns to factors
 character_cols <- colnames(metadata)[1:5]
-metadata <- metadata %>%
-  mutate(across(all_of(character_cols), as.factor))
+metadata <- metadata %>% mutate(across(all_of(character_cols), as.factor))
 
 #separate out groups of metadata which you would like to compare
 Cherry <- metadata[metadata$Fruit %in% c("Cherry"),]
@@ -146,6 +145,9 @@ dataset_names <- c("Cherry", "Banana", "Apple", "Date", "Elderberry")
 
 #set the destination file path and file name
 file_path <- ("/path/to/summary.csv")
+
+#set the columns to compare
+columns <- colnames(metadata)[1:5]
 
 #run the function
 summary <- factor_levels_summaries(datasets = datasets, 
