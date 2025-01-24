@@ -9,7 +9,7 @@ usage() {
     echo "Options:"
     echo "  --builddb               Build a Kraken2 database with bacteria"
     echo "  --db-dir <path>         Specify an existing or new directory for the Kraken2 database (default: ./kraken2db)"
-    echo "  --db-threads <num>      Specify the number of threads to use for building the database (default: 4)"
+    echo "  --db-threads <num>      Specify the number of threads to use for building the database (default: 1)"
     echo "  --fna-dir <path>        Directory containing .fna files and strain info .txt file (required for --update-fna, --append-library, --append-prelim, --append-names, and --append-nodes)"
     echo "  --python-script <path>  Specify the Python script to use for updating .fna headers (default: /workdir/sct88/shells/updatefna.py)"
     echo "  --kraken-path <path>    Specify the path to the Kraken2 installation (default: /programs/kraken2.1.3)"
