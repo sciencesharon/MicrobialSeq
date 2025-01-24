@@ -3,18 +3,16 @@
 # Set the script to exit immediately on any error
 set -e
 
-# Export paths for Kraken and Bracken
-export PATH=/programs/Bracken-2.9:/programs/Bracken-2.9/src:/programs/Bracken-2.9/analysis_scripts:$PATH
-export PATH=/programs/kraken2.1.3:$PATH
-
 # Function to display usage
 usage() {
-    echo "Usage: $0 --fastq-dir DIR [--kraken-db DIR] [--kraken-confidence VALUE] [--kraken-min-hit-groups VALUE] [--threads VALUE] [--bracken] [--bracken-read-length VALUE]"
+    echo "Usage: $0 --fastq-dir DIR --kraken-path PATH --bracken-path PATH [--kraken-db DIR] [--kraken-confidence VALUE] [--kraken-min-hit-groups VALUE] [--threads VALUE] [--bracken] [--bracken-read-length VALUE]"
     exit 1
 }
 
 # Parse arguments
 FASTQ_DIR=""
+KRAKEN_PATH=""
+BRACKEN_PATH=""
 KRAKEN_DB=""
 KRAKEN_CONFIDENCE=0.1
 KRAKEN_MIN_HIT_GROUPS=2
@@ -26,6 +24,14 @@ while [[ "$#" -gt 0 ]]; do
     case $1 in
         --fastq-dir)
             FASTQ_DIR="$2"
+            shift 2
+            ;;
+        --kraken-path)
+            KRAKEN_PATH="$2"
+            shift 2
+            ;;
+        --bracken-path)
+            BRACKEN_PATH="$2"
             shift 2
             ;;
         --kraken-db)
@@ -58,28 +64,40 @@ while [[ "$#" -gt 0 ]]; do
     esac
 done
 
-# Check if fastq directory is provided
-if [[ -z "$FASTQ_DIR" ]]; then
+# Check if required arguments are provided
+if [[ -z "$FASTQ_DIR" || -z "$KRAKEN_PATH" || -z "$BRACKEN_PATH" ]]; then
     usage
 fi
 
-# Ensure the fastq directory exists
+# Ensure the specified directories exist
 if [[ ! -d "$FASTQ_DIR" ]]; then
     echo "Error: Directory $FASTQ_DIR does not exist."
     exit 1
 fi
 
-# Check if kraken database directory is provided
+if [[ ! -d "$KRAKEN_PATH" ]]; then
+    echo "Error: Kraken path $KRAKEN_PATH does not exist."
+    exit 1
+fi
+
+if [[ ! -d "$BRACKEN_PATH" ]]; then
+    echo "Error: Bracken path $BRACKEN_PATH does not exist."
+    exit 1
+fi
+
 if [[ -z "$KRAKEN_DB" ]]; then
     echo "Error: Kraken database directory must be specified with --kraken-db."
     exit 1
 fi
 
-# Ensure the kraken database directory exists
 if [[ ! -d "$KRAKEN_DB" ]]; then
     echo "Error: Directory $KRAKEN_DB does not exist."
     exit 1
 fi
+
+# Export paths for Kraken and Bracken
+export PATH=$KRAKEN_PATH:$PATH
+export PATH=$BRACKEN_PATH:$PATH
 
 # Create subdirectories for output organization
 KRAKEN_OUTPUT_DIR="$FASTQ_DIR/kraken_output"
